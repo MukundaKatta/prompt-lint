@@ -11,6 +11,19 @@ import re
 from dataclasses import dataclass, field
 from typing import Literal
 
+__all__ = [
+    "Violation",
+    "LintResult",
+    "Rule",
+    "TooLong",
+    "InjectionRisk",
+    "EmptyContent",
+    "DuplicateSystemPrompt",
+    "MissingSystemPrompt",
+    "UnknownRole",
+    "PromptLinter",
+]
+
 # ---------------------------------------------------------------------------
 # Core types
 # ---------------------------------------------------------------------------
@@ -56,9 +69,7 @@ class TooLong(Rule):
 
     def check(self, messages: list[dict]) -> list[Violation]:
         total = sum(
-            len(m.get("content") or "")
-            for m in messages
-            if isinstance(m.get("content"), str)
+            len(m.get("content") or "") for m in messages if isinstance(m.get("content"), str)
         )
         if total > self.max_chars:
             return [
